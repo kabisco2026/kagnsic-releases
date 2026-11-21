@@ -1,6 +1,17 @@
 {
   "schemaVersion": 1,
   "name": "Kagnsic",
-  "sdks": [],
+  "sdks": [
+    {
+      "version": "2027.1",
+      "framework": "0.2.0",
+      "channel": "dev",
+      "archive": {
+        "url": "https://github.com/kabisco2026/kagnsic-releases/releases/download/v0.1.0/kagnsic-sdk-2027.1.zip",
+        "sha256": "2a418575228dac62657142ac47068b1f24fa6f6d24462372799ecf075cc2bccc",
+        "size": 536663
+      }
+    }
+  ],
   "tools": []
 }
