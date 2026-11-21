@@ -1,0 +1,43 @@
+name: Sources GPL
+
+# Recopie dans chaque version publiee le code source correspondant des composants GPL/LGPL livres avec
+# Kagnsic Studio (liste : fichier sources-gpl.json joint a la version). Telechargement depuis les sites
+# officiels, puis ajout a la version avec l'empreinte SHA-256 de chaque archive (SOURCES-GPL.txt).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Etiquette de la version (ex. v0.1.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  sources:
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - name: Liste des sources de la version
+        run: gh release download "$TAG" -R "$GITHUB_REPOSITORY" -p sources-gpl.json
+      - name: Telecharger depuis les sites officiels
+        run: |
+          mkdir -p sources
+          {
+            echo "Code source des composants sous GPL et LGPL livres avec Kagnsic Studio $TAG"
+            echo "(fichier ; composant ; origine ; SHA-256)"
+            echo
+          } > sources/SOURCES-GPL.txt
+          jq -c '.sources[]' sources-gpl.json | while read -r s; do
+            file=$(echo "$s" | jq -r .file); url=$(echo "$s" | jq -r .url); what=$(echo "$s" | jq -r .component)
+            echo "== $file"
+            curl -fL --retry 3 --retry-delay 5 -o "sources/$file" "$url"
+            echo "$file ; $what ; $url ; $(sha256sum "sources/$file" | cut -d' ' -f1)" >> sources/SOURCES-GPL.txt
+          done
+          ls -la sources
+      - name: Ajouter a la version
+        run: gh release upload "$TAG" -R "$GITHUB_REPOSITORY" --clobber sources/*
