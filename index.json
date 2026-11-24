@@ -31,6 +31,16 @@
         "sha256": "a4ab49fd72f236ae17ed7af0bade4b9390400e6ccb3d3714034c40cc836f4e37",
         "size": 568336
       }
+    },
+    {
+      "version": "2027.4",
+      "framework": "0.5.0",
+      "channel": "dev",
+      "archive": {
+        "url": "https://github.com/kabisco2026/kagnsic-releases/releases/download/v0.2.4/kagnsic-sdk-2027.4.zip",
+        "sha256": "f081358811ecde1f5d5aeb1855345c2dfbb16b55fc1549d15536a3cf772edbfc",
+        "size": 574385
+      }
     }
   ],
   "tools": []
